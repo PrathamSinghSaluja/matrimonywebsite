@@ -415,14 +415,14 @@ function ProfilePage() {
               </p>
             </div>
             <div className=" my-4 flex justify-evenly w-full ">
-              {/* <Btn
+              <Btn
                 disabled
                 text="Contact"
-                onClick={() => {
+                // onClick={() => {
                   
                   
-                }}
-              /> */}
+                // }}
+              />
 
               <Btn text={isSave ? "Unsave" : "Save"} onClick={addToShortList} />
               <Btn
