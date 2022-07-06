@@ -39,6 +39,7 @@ function Footer({ extraClass }) {
                         <a
                           href={item.href}
                           className="text-base text-green-900 hover:text-gray-900"
+                          target='_blank'
                         >
                           {item.name}
                         </a>

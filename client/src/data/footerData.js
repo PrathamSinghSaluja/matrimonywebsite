@@ -2,6 +2,7 @@ export const navigation = {
   quicklinks: [
     { name: "Privacy Policy", href: "#" },
     { name: "T&C", href: "#" },
+    { name: "Guide", href: 'https://youtu.be/B2JQ9QWKgFo'}
   ],
   navdata: [
     { name: "About", href: "/about" },
