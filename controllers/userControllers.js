@@ -214,6 +214,7 @@ const loginUser = async (req, res) => {
       },
     });
   } catch (err) {
+    console.log('error here')
     res.status(500).json({ msg: err.message });
   }
 };
@@ -252,6 +253,7 @@ const getUserByID = async (req, res) => {
     if (!user) {
       return res.json(false);
     }
+  
     res.json(user);
   } catch (err) {
     return res.json(false);

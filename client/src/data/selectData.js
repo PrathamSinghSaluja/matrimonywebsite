@@ -888,6 +888,10 @@ export const parentsJob = [
     text: "non working",
     value: "nonworking",
   },
+  {
+    text: "retired",
+    value: "retired",
+  },
 ];
 export const mangolikData = [
   {

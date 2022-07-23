@@ -42,6 +42,7 @@ const mapKeys = {
   Motherjob: "motherjob",
   imageURL: "image",
   About: "aboutyou",
+  "CreatedAt":"createdAt"
 };
 
 function ProfilePage() {
@@ -131,8 +132,9 @@ function ProfilePage() {
             ? res.data[mapKeys[key]]
             : "";
         }
+        //mappedData.CreatedAt = mappedData.CreatedAt.splice(0,10)
         setUserData(mappedData);
-        // console.log(userData);
+       // console.log(UserData.CreatedAT)
       })
       .catch((err) => {
         setPopupMsg("Fetching Details Failed");
@@ -199,6 +201,7 @@ function ProfilePage() {
     Country: userData["Country"],
   };
 
+
   const basicDetails = {
     "User Name": userData["User Name"],
     "Date Of Birth": userData["Date Of Birth"],
@@ -213,6 +216,7 @@ function ProfilePage() {
     Sibling: userData["Sibling"],
     Fatherjob: userData["Fatherjob"],
     Motherjob: userData["Motherjob"],
+    "Joined at" :String(userData["CreatedAt"]).slice(0,10)
   };
 
   const eduprofDetails = {
@@ -302,7 +306,7 @@ function ProfilePage() {
       });
   };
   console.log(!blockedProfile && isClicked);
-
+  console.log(userData);
   return (
     <>
       {addedProfile && isClicked && <AddtoShortlist />}
@@ -318,12 +322,12 @@ function ProfilePage() {
         )}
         {/* Short Details */}
         <div className="lg:flex  md:mx-24 mx-4  ">
-          <div className="mx-2 ">
+          <div className="mx-2 " style={{"marginLeft":"auto"}}>
             <span className="flex justify-center my-4">
               <LazyLoadImage
                 loading="lazy"
                 className=" object-cover"
-                style={{ height: "220px", width: "100%" }}
+                style={{ height: "220px", width: "183px" }}
                 src={
                   images ? Object.entries(images)[imageIndex][1] : defaultImage
                 }
@@ -360,7 +364,7 @@ function ProfilePage() {
             </div>
           </div>
 
-          <div className="py-2 bg-main-red text-white  shadow-delivery-shadow md:p-2 rounded-md">
+          <div className="py-2 bg-main-red text-white  shadow-delivery-shadow md:p-2 rounded-md" style={{"marginRight":"auto"}}>
             <h1 className="text-2xl my-4 font-bold text-purple-100 text-center  ">
               {userData["User Name"]}
             </h1>
