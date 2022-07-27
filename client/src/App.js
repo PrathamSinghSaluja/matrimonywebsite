@@ -35,6 +35,8 @@ import urls from "./urls/urls";
 const axios = require("axios");
 const { useNavigate } = require("react-router-dom");
 
+
+
 // import fetchUser from "../../backend/middleware/authdata.js";
 
 function usePageViews() {
@@ -94,9 +96,12 @@ function App() {
   }
 
   return (
+    
+    
     <BrowserRouter>
       {navigationBar()}
       <Routes>
+        
         <Route exact path={urls.home} element={<Home />} />
         <Route exact path={urls.confirmEmail} element={<ConfirmEmail />} />
         <Route exact path={urls.login} element={<Login />} />
