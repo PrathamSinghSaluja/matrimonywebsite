@@ -43,6 +43,8 @@ const {
   savedProfilesAdminView,
   saveuserid,
   getUserByUID,
+  userSearchSheet,
+  getUserByUserIDAdmin
 } = require("../controllers/userControllers");
 
 router.post("/signup", registerUser);
@@ -90,8 +92,12 @@ router.delete('/deleteUser/:userid', auth, deleteUser);
 router.post('/recentSignup', auth, recentSignupUsers);
 router.post('/updateLastView', auth, updateLastViewed);
 router.get('/admin/getAllUsers', auth, getAllUsersForAdmin);
+router.get('/admin/userIdsearch/:userid', auth, getUserByUserIDAdmin);
+
+
 router.get('/admin/:userid', auth, getUserByIDAdmin);
 router.post('/admin/addClick', addClick);
 router.post("/admin/savedProfile", auth, savedProfilesAdminView);
+router.post("/admin/usersheet/:id",userSearchSheet) 
 
 module.exports = router;

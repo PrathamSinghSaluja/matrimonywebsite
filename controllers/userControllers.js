@@ -22,20 +22,20 @@ const transporter = nodemailer.createTransport({
     pass: "vbpwydzqohvaharj",
   },
 });
-const saveuserid = (req,res)=>{
+const saveuserid = (req, res) => {
   console.log("the id is########################################", req.user)
   User.findByIdAndUpdate(req.user, {
-    userid : req.params.userid,
-    useridadded : true,
-  }).then(e=>res.status(200).json({msg:"user successfully updated"})).catch(e=>res.status(400).json({msg:"cant update"}))
+    userid: req.params.userid,
+    useridadded: true,
+  }).then(e => res.status(200).json({ msg: "user successfully updated" })).catch(e => res.status(400).json({ msg: "cant update" }))
 
 }
 
 const getUserByUID = async (req, res) => {
   try {
-   // const user = await User.findOne({shortId : req.params.userid}); 
-   console.log("from uid")
-    const user=await User.findById(req.params.userid)
+    // const user = await User.findOne({shortId : req.params.userid}); 
+    console.log("from uid")
+    const user = await User.findById(req.params.userid)
     if (!user) {
       return res.json(false);
     }
@@ -47,13 +47,13 @@ const getUserByUID = async (req, res) => {
 
 
 
-const nameavailable =async (req,res)=>{
+const nameavailable = async (req, res) => {
   const existingUser = await User.findOne({ userid: req.params.userid });
-  if(existingUser){
-res.status(404).json({msg :"already a username"})
+  if (existingUser) {
+    res.status(404).json({ msg: "already a username" })
   }
   else
-  res.status(200).json({msg : "you can take this name as your username"})
+    res.status(200).json({ msg: "you can take this name as your username" })
 }
 
 const registerUser = async (req, res) => {
@@ -61,8 +61,8 @@ const registerUser = async (req, res) => {
     const { fullname, email, password } = req.body;
     // req.body.image = req.body.profileImg;
     console.log(req.body);
-    req.body['useridadded']  = false
-    req.body['userid']  = ""
+    req.body['useridadded'] = false
+    req.body['userid'] = ""
 
 
     //Check if user exists
@@ -139,8 +139,8 @@ const registerUser = async (req, res) => {
           .status(200)
           .send(
             "A verification email has been sent to " +
-              user.email +
-              ". It will be expire after one day."
+            user.email +
+            ". It will be expire after one day."
           );
       });
     } else {
@@ -152,19 +152,20 @@ const registerUser = async (req, res) => {
 };
 
 const editUserDetails = async (req, res) => {
-  
+
   try {
     let { fullname, email, password, newEmail } = req.body;
     //User ID
     const id = req.user;
     //New email
-    if(newEmail)
-    {const existingUser = await User.findOne({ email: newEmail });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ msg: "An account with this email already exists." });
-    }}
+    if (newEmail) {
+      const existingUser = await User.findOne({ email: newEmail });
+      if (existingUser) {
+        return res
+          .status(400)
+          .json({ msg: "An account with this email already exists." });
+      }
+    }
     //encrypt password
     if (password) {
       const salt = await bcrypt.genSalt(10);
@@ -249,11 +250,11 @@ const getUser = async (req, res) => {
 
 const getUserByID = async (req, res) => {
   try {
-    const user = await User.findOne({userid : req.params.userid});
+    const user = await User.findOne({ userid: req.params.userid });
     if (!user) {
       return res.json(false);
     }
-  
+
     res.json(user);
   } catch (err) {
     return res.json(false);
@@ -408,14 +409,14 @@ const generateToken = (id) => {
 };
 const savedProfiles = async (req, res) => {
 
-  User.findById(req.user).then(e=>{
+  User.findById(req.user).then(e => {
     User.find({
-      userid: { $in: e.savedProfiles}
-  }, function(err, docs){
-       console.log(docs);
-       res.status(202).json(docs)
-  });
-  }).catch(e=>res.status(404).json({err:e}))
+      userid: { $in: e.savedProfiles }
+    }, function (err, docs) {
+      console.log(docs);
+      res.status(202).json(docs)
+    });
+  }).catch(e => res.status(404).json({ err: e }))
 
   // try {
   //   const user = await User.findById(req.user);
@@ -455,14 +456,14 @@ const saveProfile = async (req, res) => {
   }
 };
 const blockedProfiles = async (req, res) => {
-User.findById(req.user).then(e=>{
-  User.find({
-    userid: { $in: e.blockedProfiles}
-}, function(err, docs){
-     console.log(docs);
-     res.status(202).json(docs)
-});
-}).catch(e=>res.status(404).json({err:e}))
+  User.findById(req.user).then(e => {
+    User.find({
+      userid: { $in: e.blockedProfiles }
+    }, function (err, docs) {
+      console.log(docs);
+      res.status(202).json(docs)
+    });
+  }).catch(e => res.status(404).json({ err: e }))
 
   // try {
   //   const user = await User.findById(req.user);
@@ -501,11 +502,34 @@ const blockProfile = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
+//Function to convert DOB into integer Age to sort users for Age prefrences
+function getAge(dateString) {
+  var today = new Date();
+  var birthDate = new Date(dateString);
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
+
 const getAllUsers = async (req, res) => {
-User.findById(req.user).then(e=>{
-const oppGender = e.gender == 'Female'?"Male":"Female"
-User.find({gender:oppGender}).then(e=>{console.log(e);res.status(202).json(e)})
-}).catch(e=>res.status(404).json({err:e}))
+  User.findById(req.user).then(e => {
+    const oppGender = e.gender == 'Female' ? "Male" : "Female"
+    const APlower = e.prefAge.slice(0,2)
+    const APupper = e.prefAge.slice(3)
+    console.log(APupper) 
+    User.find({ gender: oppGender }).then(e => {
+      console.log(getAge(e[0].dob))
+       const data = e.filter((user)=>{
+         return ((getAge(user.dob)<parseInt(APupper)) && (getAge(user.dob)>parseInt(APlower)) )
+      })
+      console.log(data);
+       res.status(202).json(data) 
+      })
+  }).catch(e => res.status(404).json({ err: e }))
 
   // try {
   //   const user = await User.findById(req.user);
@@ -550,14 +574,14 @@ const storeRecentProfile = async (req, res) => {
   }
 };
 const getRecentProfiles = async (req, res) => {
-  User.findById(req.user).then(e=>{
+  User.findById(req.user).then(e => {
     User.find({
-      userid: { $in: e.recentlyViewedProfiles}
-  }, function(err, docs){
-       console.log(docs);
-       res.status(202).json(docs)
-  });
-  }).catch(e=>res.status(404).json({err:e}))
+      userid: { $in: e.recentlyViewedProfiles }
+    }, function (err, docs) {
+      console.log(docs);
+      res.status(202).json(docs)
+    });
+  }).catch(e => res.status(404).json({ err: e }))
 
 
 
@@ -606,16 +630,16 @@ const whoViewedMyProfile = async (req, res) => {
 
 const getWhoViewedMyProfile = async (req, res) => {
 
-  User.findById(req.user).then(e=>{
+  User.findById(req.user).then(e => {
     User.find({
-      userid: { $in: e.whoViewedMyProfile}
-  }, function(err, docs){
-       console.log(docs);
-       res.status(202).json(docs)
-  });
-  }).catch(e=>res.status(404).json({err:e}))
+      userid: { $in: e.whoViewedMyProfile }
+    }, function (err, docs) {
+      console.log(docs);
+      res.status(202).json(docs)
+    });
+  }).catch(e => res.status(404).json({ err: e }))
 
-  
+
   // try {
   //   const user = await User.findById(req.user);
   //   if (!user) {
@@ -688,7 +712,7 @@ const match = async (req, res) => {
   try {
     const signedUser = await User.findById(req.user);
     const userid = req.params.userid;
-    const user = await User.findOne({userid:userid});
+    const user = await User.findOne({ userid: userid });
 
     let count = 0;
     if (signedUser.country === user.country) count++;
@@ -865,6 +889,23 @@ const getUserByIDAdmin = async (req, res) => {
   }
 };
 
+const getUserByUserIDAdmin = async (req, res) => {
+  try {
+    const admin = await Admin.findById(req.user);
+    if (!admin) {
+      return res.status(401).json({ msg: "Unauthorised" });
+    }
+    const user = await User.find({userid:req.params.userid});
+    if (!user) {
+      return res.json(false);
+    }
+    console.log(user)
+    res.json(user);
+  } catch (err) {
+    return res.json(false);
+  }
+};
+
 const getAllUsersForAdmin = async (req, res) => {
   try {
     const users = await User.find({});
@@ -877,20 +918,34 @@ const getAllUsersForAdmin = async (req, res) => {
 
 const savedProfilesAdminView = async (req, res) => {
   try {
+    console.log("Admin saved")
     const AdminData = await Admin.findById(req.user);
     if (!AdminData) {
       return res.status(400).json({ error: "User not found" });
     }
     const user = await User.findById(req.body.userid);
     if (!user) {
+      console.log("user not found")
       return res.status(400).json({ error: "User not found" });
     }
     await user.populate("savedProfiles").execPopulate();
+    console.log(user)
     res.json(user.savedProfiles);
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
 };
+
+const userSearchSheet = async(req, res)=>{
+  try{
+    const id = req.params.id
+    const users = await User.find({userid:id});
+    console.log(users)
+    res.status(200).json(users);
+  }catch(error){
+    res.status(400).json(error)
+  }
+}
 
 module.exports = {
   registerUser,
@@ -927,5 +982,7 @@ module.exports = {
   nameavailable,
   savedProfilesAdminView,
   saveuserid,
-  getUserByUID
+  getUserByUID,
+  userSearchSheet,
+  getUserByUserIDAdmin
 };

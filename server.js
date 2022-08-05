@@ -12,8 +12,13 @@ app.use(cors());
 app.use(express.json());
 
 //Connect to mongoose
-const mongo_URI = process.env.MONGO_URI;
-///const mongo_URI = "mongodb+srv://sidhu:7398438689@mernapp.oucv3.mongodb.net/quizDatabase?retryWrites=true&w=majority"
+let mongo_URI =''
+if(process.env.NODE_ENV == 'production'){
+  mongo_URI = process.env.MONGO_URI;
+}  
+else{ 
+  mongo_URI = "mongodb+srv://sidhu:7398438689@mernapp.oucv3.mongodb.net/quizDatabase?retryWrites=true&w=majority"
+}
 mongoose 
   .connect(mongo_URI, {
     useNewUrlParser: true,

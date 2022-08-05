@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from "react";
+import './App.css';
 import ReactGA from "react-ga";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import PrivateOutletUser from "../src/PrivateOutletUser";
 import AdminHome from "./components/AdminDashboard.jsx/AdminHome.jsx";
+import AdminUserSheet from "./components/AdminDashboard.jsx/AdminUserSheet.jsx";
 import AdminLogin from "./components/AdminDashboard.jsx/AdminLogin.jsx";
 import MembersPage from "./components/AdminDashboard.jsx/MembersPage.jsx";
 import ProfilePageAdmin from "./components/AdminDashboard.jsx/ProfilePageAdmin.jsx";
@@ -59,6 +61,9 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if(localStorage.getItem("tokenName")){
+      localStorage.removeItem("tokenName")
+    }
     const checkLoggedIn = async () => {
       setIsLoading(true);
       let token = localStorage.getItem("auth-token");
@@ -134,11 +139,12 @@ function App() {
           <Route exact path={urls.register} element={<NewUser />} />
         </Route>
         <Route path="onetouchmatrimony/admin" element={<AdminHome />} />
+        <Route path="onetouchmatrimony/admin/userSheet" element={<AdminUserSheet/> } />
         <Route path="onetouchmatrimony/:id" element={<ProfilePageAdmin />} />
         <Route path="members" element={<MembersPage />} />
         <Route path="onetouchmatrimony/alogin" element={<AdminLogin />} />
         <Route path="*" element={<Page404 />} />
-      </Routes>
+      </Routes> 
     </BrowserRouter>
   );
 }

@@ -28,7 +28,7 @@ function PreferencePage() {
   const [fetchingDetails, setFetchingDetails] = useState(true);
 
   const [similarProfiles, setSimilarProfiles] = useState([]);
-
+  const [noSimilarProfiles,setnoSimilarProfiles] =useState(false)
   const {
     registerDet,
     addedProfile,
@@ -61,6 +61,7 @@ function PreferencePage() {
       .then((res) => {
         console.log(res);
         setSimilarProfiles(res.data);
+        res.data.length == 0 ? (setnoSimilarProfiles(true)) : (setnoSimilarProfiles(false));
       })
       .catch((err) => {
         console.log(err.response);
@@ -137,7 +138,8 @@ function PreferencePage() {
         </div>
 
         {similarProfiles.length == 0 ? (
-          <LoveLoader />
+          noSimilarProfiles ? (<p  style={{textAlign:"center" , marginTop:"20px" , fontSize:"18px"}}>No Result Found</p>) : (<LoveLoader />) 
+          
         ) : (
           <div className="md:mx-44 grid lg:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 grid-cols-1">
             {similarProfiles &&
