@@ -58,6 +58,12 @@ export const AdminMenuItems = [
     dropdown: false,
   },
   {
+    title: "User Sheet",
+    path: "/userSheet",
+    // <li><BtnLink link="/onetouchmatrimony/admin/userSheet" text="User-Sheet" /></li>
+    dropdown: false,
+  },
+  {
     title: "My Dashboard",
     path: "/admin",
     dropdown: false,

@@ -7,27 +7,36 @@ import groom2 from "../assets/image/featured/groom2.jpg";
 import groom3 from "../assets/image/featured/groom3.jpg";
 import groom4 from "../assets/image/featured/groom4.jpg";
 
+import male1 from "../assets/image/featured/male1.jpg";
+import male2 from "../assets/image/featured/male2.jpg";
+import male3 from "../assets/image/featured/male3.jpg";
+import male4 from "../assets/image/featured/male4.jpg";
+
+import female1 from "../assets/image/featured/female1.jpg";
+import female2 from "../assets/image/featured/female2.jpg";
+import female3 from "../assets/image/featured/female3.jpg";
+
 export const brideDatas = [
   {
-    img: bride1,
-    name: "Simran ",
+    img: female1,
+    name: "Jhanvi Behl ",
+    age: "21",
+    education: "Bachelor",
+    location: "Kharar, Mohali",
+  },
+  {
+    img: female2,
+    name: " Faris Arora ",
     age: "24",
-    education: "M.A in English",
-    location: "Moga, Punjab",
+    education: "B.A",
+    location: "Amritsar, Punjab",
   },
   {
-    img: bride2,
-    name: " Amrita ",
+    img: female3,
+    name: "Ritika ",
     age: "23",
-    education: "P.h.d in Design System",
-    location: "Delhi, Delhi-NCR",
-  },
-  {
-    img: bride3,
-    name: "Manpreet ",
-    age: "25",
-    education: "M.A in Design",
-    location: "Meerut, Uttar Pradesh ",
+    education: "B.A",
+    location: "Amritsar, Punjab ",
   },
   {
     img: bride4,
@@ -40,31 +49,31 @@ export const brideDatas = [
 
 export const groomDatas = [
   {
-    img: groom1,
-    name: "Swapon",
-    age: "25",
-    education: "B.S.S",
-    location: "Hajipur, Bihar",
+    img: male1,
+    name: "Abhinek Kumar",
+    age: "33",
+    education: "B.A",
+    location: "Amritsar, Punjab",
   },
   {
-    img: groom2,
-    name: "Shakti",
-    age: "23",
-    education: "B.S.C",
-    location: "Guntur, Andhra Pradesh",
+    img: male2,
+    name: "Danish Bedi",
+    age: "28",
+    education: "Not Available",
+    location: "Amritsar, Punjab",
   },
   {
-    img: groom3,
-    name: "Shuvo",
-    age: "25",
-    education: "B.A in Dramatics",
-    location: "Hyderabad, Telangana",
+    img: male3,
+    name: "Piyush Nanda",
+    age: "27",
+    education: "B.A",
+    location: "Amritsar, Punjab",
   },
   {
-    img: groom4,
-    name: "Plabon",
-    age: "26",
-    education: "MTech",
-    location: "Howrah, West Bengal",
+    img: male4,
+    name: "Harjinder Singh",
+    age: "42",
+    education: "High School",
+    location: "Amritsar, Punjab",
   },
 ];
