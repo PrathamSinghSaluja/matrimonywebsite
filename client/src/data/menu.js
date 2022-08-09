@@ -59,7 +59,7 @@ export const AdminMenuItems = [
   },
   {
     title: "User Sheet",
-    path: "/userSheet",
+    path: "/onetouchmatrimony/admin/usersheet",
     // <li><BtnLink link="/onetouchmatrimony/admin/userSheet" text="User-Sheet" /></li>
     dropdown: false,
   },
