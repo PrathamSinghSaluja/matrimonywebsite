@@ -23,19 +23,20 @@ const transporter = nodemailer.createTransport({
   },
 });
 const saveuserid = (req, res) => {
-  console.log("the id is########################################", req.user)
+  console.log("the id is########################################", req.user);
   User.findByIdAndUpdate(req.user, {
     userid: req.params.userid,
     useridadded: true,
-  }).then(e => res.status(200).json({ msg: "user successfully updated" })).catch(e => res.status(400).json({ msg: "cant update" }))
-
-}
+  })
+    .then((e) => res.status(200).json({ msg: "user successfully updated" }))
+    .catch((e) => res.status(400).json({ msg: "cant update" }));
+};
 
 const getUserByUID = async (req, res) => {
   try {
-    // const user = await User.findOne({shortId : req.params.userid}); 
-    console.log("from uid")
-    const user = await User.findById(req.params.userid)
+    // const user = await User.findOne({shortId : req.params.userid});
+    console.log("from uid");
+    const user = await User.findById(req.params.userid);
     if (!user) {
       return res.json(false);
     }
@@ -45,25 +46,21 @@ const getUserByUID = async (req, res) => {
   }
 };
 
-
-
 const nameavailable = async (req, res) => {
   const existingUser = await User.findOne({ userid: req.params.userid });
   if (existingUser) {
-    res.status(404).json({ msg: "already a username" })
-  }
-  else
-    res.status(200).json({ msg: "you can take this name as your username" })
-}
+    res.status(404).json({ msg: "already a username" });
+  } else
+    res.status(200).json({ msg: "you can take this name as your username" });
+};
 
 const registerUser = async (req, res) => {
   try {
     const { fullname, email, password } = req.body;
     // req.body.image = req.body.profileImg;
     console.log(req.body);
-    req.body['useridadded'] = false
-    req.body['userid'] = ""
-
+    req.body["useridadded"] = false;
+    req.body["userid"] = "";
 
     //Check if user exists
     const existingUser = await User.findOne({ email: email });
@@ -134,13 +131,13 @@ const registerUser = async (req, res) => {
             msg: "Technical Issue!, Please click on resend for verify your Email.",
           });
         }
-        console.log("mail sent")
+        console.log("mail sent");
         return res
           .status(200)
           .send(
             "A verification email has been sent to " +
-            user.email +
-            ". It will be expire after one day."
+              user.email +
+              ". It will be expire after one day."
           );
       });
     } else {
@@ -152,7 +149,6 @@ const registerUser = async (req, res) => {
 };
 
 const editUserDetails = async (req, res) => {
-
   try {
     let { fullname, email, password, newEmail } = req.body;
     //User ID
@@ -215,7 +211,7 @@ const loginUser = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log('error here')
+    console.log("error here");
     res.status(500).json({ msg: err.message });
   }
 };
@@ -408,15 +404,19 @@ const generateToken = (id) => {
   });
 };
 const savedProfiles = async (req, res) => {
-
-  User.findById(req.user).then(e => {
-    User.find({
-      userid: { $in: e.savedProfiles }
-    }, function (err, docs) {
-      console.log(docs);
-      res.status(202).json(docs)
-    });
-  }).catch(e => res.status(404).json({ err: e }))
+  User.findById(req.user)
+    .then((e) => {
+      User.find(
+        {
+          userid: { $in: e.savedProfiles },
+        },
+        function (err, docs) {
+          console.log(docs);
+          res.status(202).json(docs);
+        }
+      );
+    })
+    .catch((e) => res.status(404).json({ err: e }));
 
   // try {
   //   const user = await User.findById(req.user);
@@ -456,14 +456,19 @@ const saveProfile = async (req, res) => {
   }
 };
 const blockedProfiles = async (req, res) => {
-  User.findById(req.user).then(e => {
-    User.find({
-      userid: { $in: e.blockedProfiles }
-    }, function (err, docs) {
-      console.log(docs);
-      res.status(202).json(docs)
-    });
-  }).catch(e => res.status(404).json({ err: e }))
+  User.findById(req.user)
+    .then((e) => {
+      User.find(
+        {
+          userid: { $in: e.blockedProfiles },
+        },
+        function (err, docs) {
+          console.log(docs);
+          res.status(202).json(docs);
+        }
+      );
+    })
+    .catch((e) => res.status(404).json({ err: e }));
 
   // try {
   //   const user = await User.findById(req.user);
@@ -516,20 +521,25 @@ function getAge(dateString) {
 }
 
 const getAllUsers = async (req, res) => {
-  User.findById(req.user).then(e => {
-    const oppGender = e.gender == 'Female' ? "Male" : "Female"
-    const APlower = e.prefAge.slice(0,2)
-    const APupper = e.prefAge.slice(3)
-    console.log(APupper) 
-    User.find({ gender: oppGender }).then(e => {
-      console.log(getAge(e[0].dob))
-       const data = e.filter((user)=>{
-         return ((getAge(user.dob)<parseInt(APupper)) && (getAge(user.dob)>parseInt(APlower)) )
-      })
-      console.log(data);
-       res.status(202).json(data) 
-      })
-  }).catch(e => res.status(404).json({ err: e }))
+  User.findById(req.user)
+    .then((e) => {
+      const oppGender = e.gender == "Female" ? "Male" : "Female";
+      const APlower = e.prefAge.slice(0, 2);
+      const APupper = e.prefAge.slice(3);
+      console.log(APupper);
+      User.find({ gender: oppGender }).then((e) => {
+        console.log(getAge(e[0].dob));
+        const data = e.filter((user) => {
+          return (
+            getAge(user.dob) < parseInt(APupper) &&
+            getAge(user.dob) > parseInt(APlower)
+          );
+        });
+        console.log(data);
+        res.status(202).json(data);
+      });
+    })
+    .catch((e) => res.status(404).json({ err: e }));
 
   // try {
   //   const user = await User.findById(req.user);
@@ -574,16 +584,19 @@ const storeRecentProfile = async (req, res) => {
   }
 };
 const getRecentProfiles = async (req, res) => {
-  User.findById(req.user).then(e => {
-    User.find({
-      userid: { $in: e.recentlyViewedProfiles }
-    }, function (err, docs) {
-      console.log(docs);
-      res.status(202).json(docs)
-    });
-  }).catch(e => res.status(404).json({ err: e }))
-
-
+  User.findById(req.user)
+    .then((e) => {
+      User.find(
+        {
+          userid: { $in: e.recentlyViewedProfiles },
+        },
+        function (err, docs) {
+          console.log(docs);
+          res.status(202).json(docs);
+        }
+      );
+    })
+    .catch((e) => res.status(404).json({ err: e }));
 
   // try {
   //   const user = await User.findById(req.user);
@@ -610,7 +623,15 @@ const whoViewedMyProfile = async (req, res) => {
         .json({ error: "Enter profile id of the viewed profile" });
     }
 
-    const viewedUser = await User.findById(req.body.profileId);
+    console.log(req.body.profileId);
+    const viewedUser = await User.findOne({ userid: req.body.profileId });
+    console.log(viewedUser);
+
+    if (viewedUser.userid === req.body.profileId) {
+      return res
+        .status(200)
+        .json({ message: "You are seeing your own profile" });
+    }
 
     if (viewedUser.whoViewedMyProfile.includes(user._id)) {
       const index = viewedUser.whoViewedMyProfile.indexOf(user._id);
@@ -620,25 +641,74 @@ const whoViewedMyProfile = async (req, res) => {
     }
 
     viewedUser.whoViewedMyProfile.unshift(user._id);
+    
+    if(viewedUser.unsubscribed === false){
+    const savedUser = await viewedUser.save().then((result) => {
+      transporter.sendMail({
+        to: viewedUser.email,
+        from: "onetouchmatrimony@gmail.com",
+        subject: "Someone Viewed your profile",
+        html: `
+        <style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 40%;
+}
 
-    const savedUser = await viewedUser.save();
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+  padding: 2px 16px;
+}
+</style>
+</head>
+<body>
+
+<img src="https://onetouchmatrimony.com/static/media/one%20touch%20matrimonial.6b5f1341ea60bf403018.png" style="width:20%">
+<p>Hello ${viewedUser.fullname}, someone saw your profile recently :</p>
+<div class="card">
+  <img src=${user.image} alt="Avatar" style="width:200px">
+  <div class="container">
+    <h4><b>${user.fullname}</b></h4> 
+    <p>${user.location}</p> 
+    <p>${user.dob}</p> 
+  </div>
+<p style="font-size:18px;">To know more click <a href="https://onetouchmatrimony.com">here</a></p>
+<p style="font-size:10px">To unsubscribe click <a href="https://localhost:3000/unsubscribe">here</a></p>
+</div>`,
+      });
+    });
+    console.log("Mail sent");
     res.json(savedUser);
+  }
+  else{
+    const savedUser = await viewedUser.save();
+    return res.status(200).json({ message:"The person cannot receive mails." });
+  }
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
 };
 
 const getWhoViewedMyProfile = async (req, res) => {
-
-  User.findById(req.user).then(e => {
-    User.find({
-      userid: { $in: e.whoViewedMyProfile }
-    }, function (err, docs) {
-      console.log(docs);
-      res.status(202).json(docs)
-    });
-  }).catch(e => res.status(404).json({ err: e }))
-
+  console.log("User");
+  const user = req.user;
+  User.findById(user)
+    .then((e) => {
+      User.find(
+        {
+          _id: { $in: e.whoViewedMyProfile },
+        },
+        function (err, docs) {
+          console.log(docs);
+          res.status(202).json(docs);
+        }
+      );
+    })
+    .catch((e) => res.status(404).json({ err: e }));
 
   // try {
   //   const user = await User.findById(req.user);
@@ -673,12 +743,30 @@ const getpreferenceByGenderAndAge = async (req, res) => {
   }
 };
 
+const unSubscribe = async(req,res) => {
+  try{
+    const user = req.user;
+    const status = req.body.status;
+    
+    if(status==="yes"){
+      const unsubscribinguser = await User.findByIdAndUpdate(user,{$set:{unsubscribed:true}});
+      unsubscribinguser.save();
+      res.json({message:"You are unsubscribed"});
+    }else{
+      res.status(500).json({message:"Error occured."})
+    }
+    const savedUser = await unsubscribinguser.save();
+    res.status(200).json({message : "You are now unsubscribed"})
+  }catch(err){
+    res.status(500).json({msg:err.message});
+  }
+}
 // const getpreferenceByGenderAndAge = async (req, res) => {
 //   res.send("Hello")
 // }
 
 const basicSearch = async (req, res) => {
-  console.log(req.query)
+  console.log(req.query);
   try {
     const user = await User.find(req.query);
     if (!user) {
@@ -706,7 +794,6 @@ const advancedSearch = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
-
 
 const match = async (req, res) => {
   try {
@@ -895,11 +982,11 @@ const getUserByUserIDAdmin = async (req, res) => {
     if (!admin) {
       return res.status(401).json({ msg: "Unauthorised" });
     }
-    const user = await User.find({userid:req.params.userid});
+    const user = await User.find({ userid: req.params.userid });
     if (!user) {
       return res.json(false);
     }
-    console.log(user)
+    console.log(user);
     res.json(user);
   } catch (err) {
     return res.json(false);
@@ -918,34 +1005,34 @@ const getAllUsersForAdmin = async (req, res) => {
 
 const savedProfilesAdminView = async (req, res) => {
   try {
-    console.log("Admin saved")
+    console.log("Admin saved");
     const AdminData = await Admin.findById(req.user);
     if (!AdminData) {
       return res.status(400).json({ error: "User not found" });
     }
     const user = await User.findById(req.body.userid);
     if (!user) {
-      console.log("user not found")
+      console.log("user not found");
       return res.status(400).json({ error: "User not found" });
     }
     await user.populate("savedProfiles").execPopulate();
-    console.log(user)
+    console.log(user);
     res.json(user.savedProfiles);
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
 };
 
-const userSearchSheet = async(req, res)=>{
-  try{
-    const id = req.params.id
-    const users = await User.find({userid:id});
-    console.log(users)
+const userSearchSheet = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const users = await User.find({ userid: id });
+    console.log(users);
     res.status(200).json(users);
-  }catch(error){
-    res.status(400).json(error)
+  } catch (error) {
+    res.status(400).json(error);
   }
-}
+};
 
 module.exports = {
   registerUser,
@@ -984,5 +1071,6 @@ module.exports = {
   saveuserid,
   getUserByUID,
   userSearchSheet,
-  getUserByUserIDAdmin
+  getUserByUserIDAdmin,
+  unSubscribe,
 };

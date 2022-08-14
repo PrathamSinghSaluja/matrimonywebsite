@@ -29,27 +29,30 @@ export const MenuItems = [
     ],
   },
 
+  // {
+  //   title: "About Us",
+  //   path: "/about",
+  //   dropdown: false,
+  // },
+  // {
+  //   title: "Contact Us",
+  //   path: "/contact",
+  //   dropdown: false,
+  // },
   {
-    title: "About Us",
-    path: "/about",
-    dropdown: false,
+    title: "Viewed My Profile",
+    path: "/whoviewedmyprofile",
   },
-  {
-    title: "Contact Us",
-    path: "/contact",
-    dropdown: false,
-  },
-
   {
     title: "Setting",
     path: "/setting",
     dropdown: false,
   },
-  {
-    title: "Notification",
-    path: "/notification",
-    dropdown: false,
-  },
+   {
+     title: "Notification",
+     path: "/notification",
+     dropdown: false,
+   },
 ];
 export const AdminMenuItems = [
   {

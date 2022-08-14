@@ -33,6 +33,8 @@ import MembershipPage from "./pages/MembershipPage";
 import Page404 from "./pages/Page404";
 import Setting from "./pages/Setting.js";
 import urls from "./urls/urls";
+import WhoViewedMyProfile from "./components/WhoViewedMyProfile/WhoViewedMyProfile";
+import Unsubscribe from "./components/Unsubscribe/Unsubscribe";
 // import AdminHome from "/components/AdminDashboard/AdminHome.jsx"
 const axios = require("axios");
 const { useNavigate } = require("react-router-dom");
@@ -114,6 +116,8 @@ function App() {
         <Route exact path={urls.changePassword} element={<ChangePassword />} />
         <Route exact path={urls.membership} element={<MembershipPage />} />
         <Route exact path={urls.contact} element={<ContactUsPage />} />
+        <Route exact path={urls.whoviewedmyprofile} element={<WhoViewedMyProfile  />} />
+        <Route exact path={urls.unsubscribe} element={<Unsubscribe />} />
         <Route exact path={urls.about} element={<AboutUsPage />} />
         <Route exact path={urls.adduserid} element={<Adduserid />} />
         {/* <Route exact path={"/admin"} element={<AdminHome />} /> */}

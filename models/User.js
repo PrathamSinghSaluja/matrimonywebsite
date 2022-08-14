@@ -149,6 +149,10 @@ const userSchema = new Schema(
 
     recentlyViewedProfiles: [{ type: String }],
     whoViewedMyProfile: [{ type: String }],
+    unsubscribed : {
+      type: Boolean,
+      default:false,
+    },
   },
   { timestamps: true }
 );

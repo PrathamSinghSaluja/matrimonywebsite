@@ -1,6 +1,7 @@
 import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import Btn from "../buttons/Btn";
 
 function RecentViewCard({ img, name, age, location, onClick }) {
   return (
@@ -20,8 +21,17 @@ function RecentViewCard({ img, name, age, location, onClick }) {
         </div>
         <div className=" text-left p-2">
           <h1 className="font-semibold">{name}</h1>
-          {/* <p>{age} Years</p>
-          <p>{location}</p> */}
+          <p>{age}</p>
+          <p>{location}</p>
+          <div className="text-center">
+            <Btn
+              className="hover:bg-pink-700 w-44 my-4"
+              text="View Profile"
+              onClick={() => {
+                showProfileHandler(profile);
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

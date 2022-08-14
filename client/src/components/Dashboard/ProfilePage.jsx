@@ -8,6 +8,7 @@ import defaultImage from "../../assets/image/default-profile.jpg";
 import demo1 from "../../assets/logo/otherImg/demo1.jpg";
 import demo2 from "../../assets/logo/otherImg/demo2.jpg";
 import { StateContext } from "../../context/StateProvider";
+import contactData from "../../data/contactData";
 import Btn from "../../subcomponents/buttons/Btn";
 import AddtoBlocklist from "../PopUpComponent/AddtoBlocklist";
 import AddtoShortlist from "../PopUpComponent/AddtoShortlist";
@@ -91,9 +92,9 @@ function ProfilePage() {
     window.open("https://wa.me/919417103593");
     axios
       .post("/api/auth/admin/addClick", {})
-      .then((res) => console.log(res.data.msg))
+      // .then((res) => console.log(res.data.msg))
       .catch((err) => {
-        console.log(err.response);
+        // console.log(err.response);
         return;
       });
   };
@@ -101,6 +102,13 @@ function ProfilePage() {
   useEffect(() => {
     window.scrollTo(0, 0);
     const token = localStorage.getItem("auth-token");
+    // console.log(id);
+    axios
+    .post("/api/auth/whoViewedMyProfile", {profileId : id } ,{
+      headers: { Authorization: `Bearer ${token}` },
+    // }).then((res)=>{
+    //   console.log(res.data)
+    }).catch((err) => {console.log(err)})
 
     axios
       .get(`/api/auth/match/${id}`, {
@@ -124,7 +132,7 @@ function ProfilePage() {
             // image3: res.data.image3,
           };
         });
-        console.log(res.data);
+        // console.log(res.data);
         // Mapping property stored in database to property being displayed to user
         const mappedData = {};
         for (const key in mapKeys) {
@@ -146,13 +154,13 @@ function ProfilePage() {
       .get("/api/auth/users", {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => {
-        console.log(res.data);
+     .then((res) => {
+       //   console.log(res.data);
 
         // Mapping property stored in database to property being displayed to user
         if (res.data.savedProfiles.indexOf(id) === -1) {
           setAddedProfile(false);
-          console.log("if run");
+          // console.log("if run");
           setIsSave(false);
         } else {
           setAddedProfile(true);
@@ -160,7 +168,7 @@ function ProfilePage() {
         }
         if (res.data.blockedProfiles.indexOf(id) === -1) {
           setBlockedProfile(false);
-          console.log("if run");
+          // console.log("if run");
           setIsBlocked(false);
         } else {
           setBlockedProfile(true);
@@ -183,13 +191,9 @@ function ProfilePage() {
     );
 
     // add logged in user to who viewed my profile of this user
-    axios.post(
-      "/api/auth/whoViewedMyProfile",
-      { profileId: id },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    axios.post("/api/auth/whoViewedMyProfile", {profileId : id },{
+      headers: {Authorization : `Bearer ${token}`},
+    })
   }, [id]);
 
   const detailSummary = {
@@ -255,19 +259,19 @@ function ProfilePage() {
         if (res.data.savedProfiles.indexOf(id) === -1) {
           setAddedProfile(false);
 
-          console.log("if run");
+          // console.log("if run");
           setIsSave(false);
         } else {
           setAddedProfile(true);
-          console.log("else run");
+          // console.log("else run");
           setIsSave(true);
         }
-        console.log("res", res);
+        // console.log("res", res);
       })
       .catch((err) => {
         setPopupMsg("Saving Profile Failed!");
-        console.log("Saving error");
-        console.log(err);
+        // console.log("Saving error");
+        // console.log(err);
         setErrorShow(true);
       });
   };
@@ -289,24 +293,24 @@ function ProfilePage() {
         if (res.data.blockedProfiles.indexOf(id) === -1) {
           setBlockedProfile(false);
 
-          console.log("if run");
+          // console.log("if run");
           setIsBlocked(false);
         } else {
           setBlockedProfile(true);
-          console.log("else run");
+          // console.log("else run");
           setIsBlocked(true);
         }
-        console.log("res", res);
+        // console.log("res", res);
       })
       .catch((err) => {
         setPopupMsg("Blocking Profile Failed!");
-        console.log("blocking error");
-        console.log(err);
+        // console.log("blocking error");
+        // console.log(err);
         setErrorShow(true);
       });
   };
-  console.log(!blockedProfile && isClicked);
-  console.log(userData);
+  // console.log(!blockedProfile && isClicked);
+  // console.log(userData);
   return (
     <>
       {addedProfile && isClicked && <AddtoShortlist />}

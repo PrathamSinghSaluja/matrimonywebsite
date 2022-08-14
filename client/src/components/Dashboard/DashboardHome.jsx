@@ -156,12 +156,12 @@ export default function IndexPage() {
                 >
                   Saved Profiles
                 </h1>
-                <h1
+                {/* <h1
                   className="border-b-[1px] border-gray-300 py-3 cursor-pointer"
                   onClick={showWhoViewedHandler}
                 >
                   Who Viewed
-                </h1>
+                </h1> */}
                 <h1
                   className="py-3 cursor-pointer"
                   onClick={showBlockedHandler}

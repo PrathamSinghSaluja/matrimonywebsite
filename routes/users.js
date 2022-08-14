@@ -44,7 +44,8 @@ const {
   saveuserid,
   getUserByUID,
   userSearchSheet,
-  getUserByUserIDAdmin
+  getUserByUserIDAdmin,
+  unSubscribe,
 } = require("../controllers/userControllers");
 
 router.post("/signup", registerUser);
@@ -56,7 +57,7 @@ router.post("/login", loginUser);
 router.post("/isTokenValid", auth, isTokenValid);
 
 router.get("/users", auth, getUser);
-
+router.get("/getWhoViewedMyProfile", auth, getWhoViewedMyProfile);
 router.get("/match/:userid", auth, match);
 
 router.get('/nameavailable/:userid',nameavailable)
@@ -78,12 +79,12 @@ router.post("/storeRecentProfile", auth, storeRecentProfile);
 router.post("/recentProfiles", auth, getRecentProfiles);
 // who viewed my profile
 router.post("/whoViewedMyProfile", auth, whoViewedMyProfile);
-router.get("/getWhoViewedMyProfile", auth, getWhoViewedMyProfile);
+
 router.post("/getpreferenceByGenderAndAge", auth, getpreferenceByGenderAndAge);
 router.post("/basicSearch", basicSearch);
 router.post("/advancedSearch", advancedSearch);
 
-
+router.post("/unsubscribe", auth, unSubscribe)
 // admin 
 router.post('/adminlogin', adminLogin);
 router.post('/adminregister', registerAdmin);
@@ -99,5 +100,6 @@ router.get('/admin/:userid', auth, getUserByIDAdmin);
 router.post('/admin/addClick', addClick);
 router.post("/admin/savedProfile", auth, savedProfilesAdminView);
 router.post("/admin/usersheet/:id",userSearchSheet) 
+
 
 module.exports = router;

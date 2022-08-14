@@ -38,11 +38,11 @@ const useFetchProfiles = (url) => {
         const response = await axios.post(url, null, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log(response);
+        // console.log(response);
         setProfilesData(response.data);
         setIsLoading(false);
       } catch (error) {
-        console.log('unable to fetch data');
+        // console.log('unable to fetch data');
         setIsLoading(false);
       }
     }

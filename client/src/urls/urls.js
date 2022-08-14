@@ -19,6 +19,8 @@ const urls = {
   setting: "/setting",
   notification: "/notification",
   register: "/register",
+  whoviewedmyprofile: "/whoviewedmyprofile",
+  unsubscribe: "/unsubscribe",
 };
 
 export default urls;

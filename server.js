@@ -7,26 +7,28 @@ const http = require("http");
 const path = require("path");
 const app = express();
 const server = http.createServer(app);
-const enforce = require('express-sslify');
+const enforce = require("express-sslify");
 app.use(cors());
 app.use(express.json());
 
 //Connect to mongoose
-let mongo_URI =''
-if(process.env.NODE_ENV == 'production'){
+let mongo_URI = "";
+if (process.env.NODE_ENV == "production") {
   mongo_URI = process.env.MONGO_URI;
-}  
-else{ 
-  mongo_URI = "mongodb+srv://sidhu:7398438689@mernapp.oucv3.mongodb.net/quizDatabase?retryWrites=true&w=majority"
+} else {
+  mongo_URI =
+    "mongodb+srv://sidhu:7398438689@mernapp.oucv3.mongodb.net/quizDatabase?retryWrites=true&w=majority";
 }
-mongoose 
+mongoose
   .connect(mongo_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false,
   })
-  .then(() => console.log("MongoDB connected..."))
+  .then(() => {
+    console.log("MongoDB connected...");
+  })
   .catch((err) => console.log(err));
 
 //Routes
@@ -41,8 +43,8 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
-process.on('uncaughtException', function (err) {
-  console.log('Caught exception: ' + err);
+process.on("uncaughtException", function (err) {
+  console.log("Caught exception: " + err);
 });
 const port = process.env.PORT || 5000;
 server.listen(port, () => {
