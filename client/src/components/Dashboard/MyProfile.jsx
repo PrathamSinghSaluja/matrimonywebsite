@@ -160,7 +160,7 @@ function MyProfile() {
     for (const prop in details) {
       mappedDetails[mapKeys[prop]] = details[prop];
     }
-    console.log("Mapped Details ", mappedDetails);
+    //console.log("Mapped Details ", mappedDetails);
 
     const token = localStorage.getItem("auth-token");
 
@@ -211,7 +211,7 @@ function MyProfile() {
     let changeImageObj = {
       [changeImage]: file.url,
     };
-    console.log(changeImageObj);
+    //console.log(changeImageObj);
     setImages((prevState) => {
       return { ...prevState, [changeImage]: file.url };
     });
@@ -225,11 +225,11 @@ function MyProfile() {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
       })
       .catch((err) => {
         setPopupMsg("Changes Failed !");
-        console.log(err.response);
+        //console.log(err.response);
         setErrorShow(true);
       });
   };

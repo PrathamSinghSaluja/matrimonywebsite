@@ -59,6 +59,7 @@ export default function Menu() {
                 <BtnLink link="/" text="Front-End" />
               </li>
               <li><BtnLink link="/onetouchmatrimony/admin/userSheet" text="User-Sheet" /></li>
+              <li><BtnLink link="/onetouchmatrimony/admin/memberSheet" text="Member-Sheet" /></li>
               <li>
                 <Btn onClick={handleLogut} text="Logout" />
               </li>

@@ -44,10 +44,10 @@ export default function AdminHome() {
       )
       .then((res) => {
         setTotalclicks((prevstate) => res.data.totalclicks);
-        console.log(res.data.totalclicks);
+        //console.log(res.data.totalclicks);
       })
       .catch((err) => {
-        console.log(err.response);
+        //console.log(err.response);
         navigate("/onetouchmatrimony/alogin");
       });
 
@@ -83,7 +83,7 @@ export default function AdminHome() {
             }
           )
           .then((res) => {
-            console.log(res.data);
+            //console.log(res.data);
           })
           .catch((err) => {
             console.log(err.response);
@@ -117,7 +117,7 @@ export default function AdminHome() {
         setAllUsers((prevstate) => {
           return prevstate.filter((item) => item._id !== profile._id);
         });
-        console.log(res.data);
+        //console.log(res.data);
       })
       .catch((err) => {
         console.log(err.response);

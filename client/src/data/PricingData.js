@@ -1,8 +1,9 @@
 const priceData = [
   {
     name: "Silver",
-    price: "350",
+    price: 1700,
     duration: "Month",
+    months: 1,
     isPopular: false,
     data: [
       {
@@ -26,8 +27,9 @@ const priceData = [
 
   {
     name: "Gold",
-    price: "700",
-    duration: "Month",
+    price: 5100,
+    duration: "3 Months + 1 Month Free",
+    months: 4,
     isPopular: true,
     data: [
       {
@@ -51,9 +53,10 @@ const priceData = [
 
   {
     name: "Platinum",
-    price: "1225",
-    duration: "Month",
+    price: 11000,
+    duration: "Year",
     isPopular: false,
+    months: 12,
     data: [
       {
         name: "Lorem ipsum dolor sit .",

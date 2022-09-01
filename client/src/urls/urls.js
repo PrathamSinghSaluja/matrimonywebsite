@@ -21,6 +21,8 @@ const urls = {
   register: "/register",
   whoviewedmyprofile: "/whoviewedmyprofile",
   unsubscribe: "/unsubscribe",
+  paymentSuccess: "/payment/success/:type/:price/:id",
+  contactpopup: "/contactpopup"
 };
 
 export default urls;

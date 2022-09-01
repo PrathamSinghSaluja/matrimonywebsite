@@ -67,7 +67,9 @@ function ProfilePageAdmin() {
   const whatsAppMe = () => {
     axios
       .post("/api/auth/admin/addClick", {})
-      .then((res) => console.log(res.data.msg))
+      .then((res) => {
+      //console.log(res.data.msg))
+      })
       .catch((err) => {
         console.log(err.response);
         return;
@@ -93,7 +95,7 @@ function ProfilePageAdmin() {
             // image3: res.data.image3,
           };
         });
-        console.log(res.data);
+        //console.log(res.data);
         axios
           .post(
             "/api/auth/admin/savedProfile",

@@ -39,7 +39,8 @@ function Navbar() {
     window.open("https://wa.me/919417103593");
     axios
       .post("/api/auth/admin/addClick", {})
-      .then((res) => console.log(res.data.msg))
+      .then((res) => {//console.log(res.data.msg)
+      })
       .catch((err) => {
         console.log(err.response);
         return;

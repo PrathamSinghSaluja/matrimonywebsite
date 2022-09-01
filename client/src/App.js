@@ -35,6 +35,10 @@ import Setting from "./pages/Setting.js";
 import urls from "./urls/urls";
 import WhoViewedMyProfile from "./components/WhoViewedMyProfile/WhoViewedMyProfile";
 import Unsubscribe from "./components/Unsubscribe/Unsubscribe";
+import Payment from "./components/Membership/Payment";
+import PaymentSuccess from "./components/PaymentSuccess/PaymentSuccess";
+import AdminMember from "./components/AdminDashboard.jsx/AdminMember";
+
 // import AdminHome from "/components/AdminDashboard/AdminHome.jsx"
 const axios = require("axios");
 const { useNavigate } = require("react-router-dom");
@@ -120,6 +124,9 @@ function App() {
         <Route exact path={urls.unsubscribe} element={<Unsubscribe />} />
         <Route exact path={urls.about} element={<AboutUsPage />} />
         <Route exact path={urls.adduserid} element={<Adduserid />} />
+        {/* <Route exact path={"/payment/:type/:price/:months/:id/:fullname"} element={<Payment />} />
+        <Route exact path={urls.paymentSuccess} element={<PaymentSuccess />} /> */}
+        {/* <Route exact path={urls.contactpopup} element={<ContactPopup/>} /> */}
         {/* <Route exact path={"/admin"} element={<AdminHome />} /> */}
         
         <Route
@@ -147,6 +154,7 @@ function App() {
         <Route path="onetouchmatrimony/:id" element={<ProfilePageAdmin />} />
         <Route path="members" element={<MembersPage />} />
         <Route path="onetouchmatrimony/alogin" element={<AdminLogin />} />
+        {/* <Route path="onetouchmatrimony/admin/memberSheet" element={<AdminMember/>} /> */}
         <Route path="*" element={<Page404 />} />
       </Routes> 
     </BrowserRouter>

@@ -15,6 +15,10 @@ import AddtoShortlist from "../PopUpComponent/AddtoShortlist";
 import SinglePopup from "../PopUpComponent/SinglePopup";
 import PreferencePage from "./PreferencePage";
 import ProfileInfoSkelton from "./ProfileInfoSkelton";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
+
 
 const mapKeys = {
   "User Name": "fullname",
@@ -43,7 +47,7 @@ const mapKeys = {
   Motherjob: "motherjob",
   imageURL: "image",
   About: "aboutyou",
-  "CreatedAt":"createdAt"
+  CreatedAt: "createdAt",
 };
 
 function ProfilePage() {
@@ -83,9 +87,9 @@ function ProfilePage() {
     // },
   ];
   const [imageIndex, setImageIndex] = useState(0);
-
+  const [member, setMember] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-
+  const navigate = useNavigate();
   // Whatsapp function
 
   const whatsAppMe = () => {
@@ -104,11 +108,18 @@ function ProfilePage() {
     const token = localStorage.getItem("auth-token");
     // console.log(id);
     axios
-    .post("/api/auth/whoViewedMyProfile", {profileId : id } ,{
-      headers: { Authorization: `Bearer ${token}` },
-    // }).then((res)=>{
-    //   console.log(res.data)
-    }).catch((err) => {console.log(err)})
+      .post(
+        "/api/auth/whoViewedMyProfile",
+        { profileId: id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          // }).then((res)=>{
+          //   console.log(res.data)
+        }
+      )
+      .catch((err) => {
+        console.log(err);
+      });
 
     axios
       .get(`/api/auth/match/${id}`, {
@@ -142,7 +153,7 @@ function ProfilePage() {
         }
         //mappedData.CreatedAt = mappedData.CreatedAt.splice(0,10)
         setUserData(mappedData);
-       // console.log(UserData.CreatedAT)
+        // console.log(UserData.CreatedAT)
       })
       .catch((err) => {
         setPopupMsg("Fetching Details Failed");
@@ -154,8 +165,8 @@ function ProfilePage() {
       .get("/api/auth/users", {
         headers: { Authorization: `Bearer ${token}` },
       })
-     .then((res) => {
-       //   console.log(res.data);
+      .then((res) => {
+        //   console.log(res.data);
 
         // Mapping property stored in database to property being displayed to user
         if (res.data.savedProfiles.indexOf(id) === -1) {
@@ -175,6 +186,14 @@ function ProfilePage() {
 
           setIsBlocked(true);
         }
+
+        res.data.memberdetails.map((mem) => {
+          const currdate = new Date().getTime();
+          const expiry = new Date(mem.expiryDate).getTime();
+          if (currdate < expiry) {
+            setMember(true);
+          }
+        });
       })
       .catch((err) => {
         setPopupMsg("Fetch Logged in user data error");
@@ -191,9 +210,13 @@ function ProfilePage() {
     );
 
     // add logged in user to who viewed my profile of this user
-    axios.post("/api/auth/whoViewedMyProfile", {profileId : id },{
-      headers: {Authorization : `Bearer ${token}`},
-    })
+    axios.post(
+      "/api/auth/whoViewedMyProfile",
+      { profileId: id },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
   }, [id]);
 
   const detailSummary = {
@@ -204,7 +227,6 @@ function ProfilePage() {
     Religion: userData["Religion"],
     Country: userData["Country"],
   };
-
 
   const basicDetails = {
     "User Name": userData["User Name"],
@@ -220,7 +242,7 @@ function ProfilePage() {
     Sibling: userData["Sibling"],
     Fatherjob: userData["Fatherjob"],
     Motherjob: userData["Motherjob"],
-    "Joined at" :String(userData["CreatedAt"]).slice(0,10)
+    "Joined at": String(userData["CreatedAt"]).slice(0, 10),
   };
 
   const eduprofDetails = {
@@ -309,6 +331,8 @@ function ProfilePage() {
         setErrorShow(true);
       });
   };
+
+
   // console.log(!blockedProfile && isClicked);
   // console.log(userData);
   return (
@@ -326,7 +350,7 @@ function ProfilePage() {
         )}
         {/* Short Details */}
         <div className="lg:flex  md:mx-24 mx-4  ">
-          <div className="mx-2 " style={{"marginLeft":"auto"}}>
+          <div className="mx-2 " style={{ marginLeft: "auto" }}>
             <span className="flex justify-center my-4">
               <LazyLoadImage
                 loading="lazy"
@@ -368,7 +392,10 @@ function ProfilePage() {
             </div>
           </div>
 
-          <div className="py-2 bg-main-red text-white  shadow-delivery-shadow md:p-2 rounded-md" style={{"marginRight":"auto"}}>
+          <div
+            className="py-2 bg-main-red text-white  shadow-delivery-shadow md:p-2 rounded-md"
+            style={{ marginRight: "auto" }}
+          >
             <h1 className="text-2xl my-4 font-bold text-purple-100 text-center  ">
               {userData["User Name"]}
             </h1>
@@ -423,15 +450,27 @@ function ProfilePage() {
               </p>
             </div>
             <div className=" my-4 flex justify-evenly w-full ">
-              <Btn
-                disabled
-                text="Contact"
-                // onClick={() => {
-                  
-                  
-                // }}
-              />
-
+              {
+                <Btn
+                  text="Contact"
+                  onClick={() => {
+                    member
+                      ? 
+                      Swal.fire({text: `You can contact the person on : ${phone}`,
+                                 confirmButtonText: 'Call Now',
+                                 showCancelButton: true,
+                                 confirmButtonColor: '#3085d6',
+                                 cancelButtonColor: '#d33',
+                    }).then((result) => {
+                        if(result.isConfirmed){
+                          window.location.href=`tel:${phone}`
+                        }
+                      })
+                      
+                      : navigate("/membership");
+                  }}
+                />
+              }
               <Btn text={isSave ? "Unsave" : "Save"} onClick={addToShortList} />
               <Btn
                 text={isBlocked ? "Unblock" : "Block"}

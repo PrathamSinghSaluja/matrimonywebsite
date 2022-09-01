@@ -48,11 +48,16 @@ export const MenuItems = [
     path: "/setting",
     dropdown: false,
   },
-   {
-     title: "Notification",
-     path: "/notification",
-     dropdown: false,
-   },
+  //  {
+  //    title: "Notification",
+  //    path: "/notification",
+  //    dropdown: false,
+  //  },
+  {
+    title: "Membership",
+    path: "/membership",
+    dropdown: false,
+  }
 ];
 export const AdminMenuItems = [
   {

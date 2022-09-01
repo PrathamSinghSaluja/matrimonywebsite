@@ -47,17 +47,32 @@ export default function IndexPage() {
   const [showSaved, setShowSaved] = useState(false);
   const [showBlocked, setShowBlocked] = useState(false);
   const [showWhoViewed, setShowWhoViewed] = useState(false);
+  const [member, setMember] = useState(false);
+  const [members, setMembers] = useState([]);
+  const [showMembers, setshowMembers] = useState(false);
+  const [id, setId] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("auth-token");
 
     async function fetchUserData() {
-      const userlogin = await axios.get("/api/auth/users", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const userlogin = await axios
+        .get("/api/auth/users", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          setId(res.data.userid);
+          setMembers(res.data.memberdetails);
+          res.data.memberdetails.map((mem) => {
+            const currdate = new Date().getTime();
+            const expiry = new Date(mem.expiryDate).getTime();
+            if (currdate < expiry) {
+              setMember(true);
+            }
+          });
+        });
       calcProfileProgress(userlogin.data);
       setregisterDet(userlogin.data);
-      console.log(userlogin.data);
     }
 
     fetchUserData();
@@ -76,6 +91,7 @@ export default function IndexPage() {
     setShowSaved(false);
     setShowBlocked(false);
     setShowWhoViewed(false);
+    setshowMembers(false);
   };
 
   const showSavedHandler = () => {
@@ -83,6 +99,7 @@ export default function IndexPage() {
     setShowRecent(false);
     setShowBlocked(false);
     setShowWhoViewed(false);
+    setshowMembers(false);
   };
 
   const showBlockedHandler = () => {
@@ -90,6 +107,7 @@ export default function IndexPage() {
     setShowRecent(false);
     setShowSaved(false);
     setShowWhoViewed(false);
+    setshowMembers(false);
   };
 
   const showWhoViewedHandler = () => {
@@ -97,7 +115,33 @@ export default function IndexPage() {
     setShowBlocked(false);
     setShowRecent(false);
     setShowSaved(false);
+    setshowMembers(false);
   };
+
+  // const showmember = () => {
+  //   setshowMembers(true);
+  //   setShowWhoViewed(false);
+  //   setShowBlocked(false);
+  //   setShowRecent(false);
+  //   setShowSaved(false);
+  // };
+  // const GenerateInvoice = ({ amountPaid, id, type }) => {
+  //   axios(`/api/auth/invoice/${type}/${amountPaid}/${id}`, {
+  //     method: "GET",
+  //     responseType: "blob", //Force to receive data in a Blob Format
+  //   })
+  //     .then((response) => {
+  //       //Create a Blob from the PDF Stream
+  //       const file = new Blob([response.data], { type: "application/pdf" });
+  //       //Build a URL from the file
+  //       const fileURL = URL.createObjectURL(file);
+  //       //Open the URL on new Window
+  //       window.open(fileURL);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   return (
     <>
@@ -163,11 +207,14 @@ export default function IndexPage() {
                   Who Viewed
                 </h1> */}
                 <h1
-                  className="py-3 cursor-pointer"
+                  className="py-3 border-gray-300 border-b-[1px] cursor-pointer"
                   onClick={showBlockedHandler}
                 >
                   Blocked Profiles
                 </h1>
+                {/* <h1 className="py-3 cursor-pointer" onClick={showmember}>
+                  Membership Details
+                </h1> */}
               </div>
             </div>
             {/* <PartnerPref
@@ -205,28 +252,163 @@ export default function IndexPage() {
           <div className="w-full overflow-hidden px-4 ">
             <div className="  py-10  text-center">
               <div>
-                <h1 className="md:text-6xl text-2xl font-noto-sans text-main-blue leading-loose my-2">
-                  Hello, {registerDet.fullname}
-                </h1>
-                {/* Progress Bar */}
-                Your Profile Progress
-                <div className="w-full  bg-gray-200 rounded-full  ">
-                  <div
-                    style={{ width: `${profileProgress}%` }}
-                    className={`bg-main-blue  text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-l-full`}
-                  >
-                    {profileProgress}
-                  </div>
-                </div>
-                <Link to="/myprofile" state={{ data: registerDet }}>
-                  {" "}
-                  <Btn
-                    icon={<FaEdit className="inline" />}
-                    text="Complete your profile "
-                    className=" my-4 "
-                  />
-                </Link>
+                {showMembers ? null : (
+                  <>
+                    <h1 className="md:text-6xl text-2xl font-noto-sans text-main-blue leading-loose my-2">
+                      Hello, {registerDet.fullname}
+                    </h1>
+                    {/* Progress Bar */}
+                    Your Profile Progress
+                    <div className="w-full  bg-gray-200 rounded-full  ">
+                      <div
+                        style={{ width: `${profileProgress}%` }}
+                        className={`bg-main-blue  text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-l-full`}
+                      >
+                        {profileProgress}
+                      </div>
+                    </div>
+                    <Link to="/myprofile" state={{ data: registerDet }}>
+                      {" "}
+                      <Btn
+                        icon={<FaEdit className="inline" />}
+                        text="Complete your profile "
+                        className=" my-4 "
+                      />
+                    </Link>
+                  </>
+                )}
               </div>
+              {/* {showMembers && (
+                <div className="">
+                  {member && (
+                    <>
+                      <div>
+                        <h1 className="text-2xl  pt-7 font-bold leading-loose text-main-blue">
+                          Membership Details
+                        </h1>
+                      </div>
+                      <table class="responsive-table overflow-x-auto">
+                        <thead className="table-header-row">
+                          <tr>
+                            <th
+                              scope="col"
+                              style={{ width: "70px" }}
+                              rowspan="2"
+                            >
+                              Sr. No.
+                            </th>
+                            <th scope="col" rowspan="2">
+                              Activation Date
+                            </th>
+                            <th scope="col" rowspan="2">
+                              Expires On{" "}
+                            </th>
+                            <th scope="col" rowspan="2">
+                              Amount Paid{" "}
+                            </th>
+                            <th scope="col" rowspan="2">
+                              Invoice
+                            </th>
+                            <th scope="col" rowspan="2">
+                              Status
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {members.map((mem) => {
+                            let serialNO = 1;
+                            const activationDate = mem.activeDate
+                              ? mem.activeDate
+                              : null;
+                            var amountPaid = 0;
+                            if (mem.plan === "Gold") {
+                              amountPaid = 5100;
+                            } else if (mem.plan === "Platinum") {
+                              amountPaid = 11000;
+                            } else {
+                              amountPaid = 1700;
+                            }
+                            const type = mem.plan ? mem.plan : null;
+
+                            serialNO = serialNO + 1;
+
+                            //activationDate
+                            var date = new Date(activationDate);
+                            var dd = String(date.getDate()).padStart(2, "0");
+                            var mm = String(date.getMonth() + 1).padStart(
+                              2,
+                              "0"
+                            ); //January is 0!
+                            var yyyy = date.getFullYear();
+
+                            date = mm + "/" + dd + "/" + yyyy;
+
+                            //ExpiryDate
+                            var expirydate = new Date(mem.expiryDate);
+                            var dd = String(expirydate.getDate()).padStart(
+                              2,
+                              "0"
+                            );
+                            var mm = String(expirydate.getMonth() + 1).padStart(
+                              2,
+                              "0"
+                            ); //January is 0!
+                            var yyyy = expirydate.getFullYear();
+
+                            expirydate = mm + "/" + dd + "/" + yyyy;
+
+                            const curr = new Date().getTime();
+                            const exp = new Date(mem.expiryDate).getTime();
+
+                            if (exp > curr) {
+                              var status = "Active";
+                            } else {
+                              var status = "Expired";
+                            }
+                            return (
+                              <tr>
+                                <td
+                                  scope="col"
+                                  style={{ width: "70px" }}
+                                  rowspan="2"
+                                >
+                                  {serialNO}
+                                </td>
+                                <td scope="col" rowspan="2">
+                                  {date}
+                                </td>
+                                <td scope="col" rowspan="2">
+                                  {expirydate}
+                                </td>
+                                <td scope="col" rowspan="2">
+                                  {amountPaid}
+                                </td>
+                                <td scope="col" rowspan="2">
+                                  <button
+                                    className="hover:underline"
+                                    onClick={() => {
+                                      GenerateInvoice({
+                                        amountPaid,
+                                        id,
+                                        type,
+                                      });
+                                    }}
+                                  >
+                                    Download
+                                  </button>
+                                </td>
+                                <td scope="col" rowspan="2">
+                                  {status}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </>
+                  )}
+                </div>
+              )} */}
 
               {showBlocked && (
                 <CompleteView
@@ -241,10 +423,13 @@ export default function IndexPage() {
                 />
               )}
 
-              <CompleteView
-                title="Saved Profiles"
-                url="/api/auth/savedProfile"
-              />
+              {showSaved && (
+                <CompleteView
+                  title="Saved Profiles"
+                  url="/api/auth/savedProfile"
+                />
+              )}
+
               {showWhoViewed && (
                 <CompleteView
                   title="Who Viewed"
